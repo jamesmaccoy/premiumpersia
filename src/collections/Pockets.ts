@@ -1,8 +1,8 @@
-import { CollectionConfig } from 'payload/types';
-import { isAdmin } from '../access/isAdmin';
-import { isAdminOrHasPolicyAccessOrPublished } from '../access/isAdminHasPolicyAccessOrPublished';
-import { isAdminOrHasPolicyAccess } from '../access/isAdminOrHasPolicyAccess';
-import { isLoggedIn } from '../access/isLoggedIn';
+import { CollectionConfig } from 'payload/types'
+import { isAdmin } from '../access/isAdmin'
+import { isAdminOrHasPolicyAccessOrPublished } from '../access/isAdminHasPolicyAccessOrPublished'
+import { isAdminOrHasPolicyAccess } from '../access/isAdminOrHasPolicyAccess'
+import { isLoggedIn } from '../access/isLoggedIn'
 
 export const Pockets: CollectionConfig = {
   slug: 'pockets',
@@ -42,9 +42,9 @@ export const Pockets: CollectionConfig = {
       // to the first Policy that they have access to
       defaultValue: ({ user }) => {
         if (!user.roles.includes('admin') && user.policys?.[0]) {
-          return user.policys[0];
+          return user.policys[0]
         }
-      }
-    }
+      },
+    },
   ],
 }

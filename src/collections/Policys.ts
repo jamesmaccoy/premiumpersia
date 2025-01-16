@@ -1,7 +1,6 @@
 import { CollectionConfig } from 'payload/types'
-
-import { anyone } from '../access/anyone'
-import { authenticated } from '../access/authenticated'
+import { isAdmin } from '../access/isAdmin'
+import { isAdminOrHasPolicyAccess } from '../access/isAdminOrHasPolicyAccess'
 
 export const Policys: CollectionConfig = {
   slug: 'policys',
@@ -10,13 +9,13 @@ export const Policys: CollectionConfig = {
   },
   access: {
     // Only admins can create
-    create: authenticated,
+    create: isAdmin,
     // Only admins or editors with policy access can read
-    read: anyone,
+    read: isAdminOrHasPolicyAccess('id'),
     // Only admins can update
-    update: authenticated,
+    update: isAdmin,
     // Only admins can delete
-    delete: authenticated,
+    delete: isAdmin,
   },
   fields: [
     {

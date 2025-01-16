@@ -96,35 +96,23 @@ export interface UserAuthOperations {
 export interface Policy {
   id: string;
   title: string;
-  updatedAt: string;
   createdAt: string;
+  updatedAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "pockets".
+ * via the `definition` "pages".
  */
 export interface Pocket {
   id: string;
   title: string;
   content?: {
-    root: {
-      type: string;
-      children: {
-        type: string;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
     [k: string]: unknown;
-  } | null;
+  }[];
   policy: string | Policy;
-  updatedAt: string;
+  _status?: 'draft' | 'published';
   createdAt: string;
-  _status?: ('draft' | 'published') | null;
+  updatedAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
