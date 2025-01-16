@@ -11,6 +11,8 @@ export interface Config {
     users: UserAuthOperations;
   };
   collections: {
+    policys: Policy;
+    pockets: Pocket;
     pages: Page;
     posts: Post;
     media: Media;
@@ -27,6 +29,8 @@ export interface Config {
   };
   collectionsJoins: {};
   collectionsSelect: {
+    policys: PolicysSelect<false> | PolicysSelect<true>;
+    pockets: PocketsSelect<false> | PocketsSelect<true>;
     pages: PagesSelect<false> | PagesSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
@@ -84,6 +88,43 @@ export interface UserAuthOperations {
     email: string;
     password: string;
   };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "policys".
+ */
+export interface Policy {
+  id: string;
+  title: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pockets".
+ */
+export interface Pocket {
+  id: string;
+  title: string;
+  content?: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  policy: string | Policy;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -317,7 +358,13 @@ export interface Category {
  */
 export interface User {
   id: string;
-  name?: string | null;
+  firstName: string;
+  lastName: string;
+  roles?: ('admin' | 'editor')[] | null;
+  /**
+   * This field sets which sites that this user has access to.
+   */
+  policys?: (string | Policy)[] | null;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -843,6 +890,14 @@ export interface PayloadLockedDocument {
   id: string;
   document?:
     | ({
+        relationTo: 'policys';
+        value: string | Policy;
+      } | null)
+    | ({
+        relationTo: 'pockets';
+        value: string | Pocket;
+      } | null)
+    | ({
         relationTo: 'pages';
         value: string | Page;
       } | null)
@@ -923,6 +978,27 @@ export interface PayloadMigration {
   batch?: number | null;
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "policys_select".
+ */
+export interface PolicysSelect<T extends boolean = true> {
+  title?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pockets_select".
+ */
+export interface PocketsSelect<T extends boolean = true> {
+  title?: T;
+  content?: T;
+  policy?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1208,7 +1284,10 @@ export interface CategoriesSelect<T extends boolean = true> {
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
-  name?: T;
+  firstName?: T;
+  lastName?: T;
+  roles?: T;
+  policys?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
